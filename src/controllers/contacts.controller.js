@@ -15,17 +15,16 @@ function getContactsByFilter(req, res) {
     }
 
     console.log(filters.join('&'));
-
-    return res.json(
-        JSend.success({
-            contacts: [],
+        return res.json(
+            JSend.success({
+                contacts: [],
         })
     );
 }
-
 function getContact(req, res) {
     return res.json(JSend.success({ contact: {} }));
 }
+
 function updateContact(req, res) {
     return res.json(JSend.success({ contact: {} }));
 }
@@ -35,7 +34,6 @@ function deleteContact(req, res) {
 function deleteAllContacts(req, res) {
     return res.json(JSend.success());
 }
-
 module.exports = {
     getContactsByFilter,
     deleteAllContacts,
@@ -43,4 +41,4 @@ module.exports = {
     createContact,
     updateContact,
     deleteContact,
-}
+};
