@@ -1,6 +1,7 @@
 const express = require('express');
 const contactsController = require('../controllers/contacts.controller');
 const { methodNotAllowed } =  require('../controllers/errors.controller');
+const avatarUpload = require('../middlewares/avatar-upload-middleware.js');
 
 const router = express.Router();
 
@@ -59,7 +60,17 @@ module.exports.setup = (app) => {
  *       content:
  *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/Contact'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               avatar:
+ *                 type: string
+ *                 format: binary
  *     tags:
  *       - contacts
  *     responses:
@@ -80,7 +91,7 @@ module.exports.setup = (app) => {
  *                     contact:
  *                       $ref: '#/components/schemas/Contact'
  */
-    router.post('/', contactsController.createContact);
+    router.post('/', avatarUpload, contactsController.createContact);
     
 /**
  * @swagger

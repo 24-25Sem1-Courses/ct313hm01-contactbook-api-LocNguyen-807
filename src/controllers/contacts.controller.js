@@ -1,3 +1,5 @@
+const contactsService = require('../services/contacts.service');
+const ApiError = require('../api-error');
 const JSend = require('../jsend');
 
 function createContact(req, res) {
@@ -34,6 +36,34 @@ function deleteContact(req, res) {
 function deleteAllContacts(req, res) {
     return res.json(JSend.success());
 }
+
+async function createContact(req, res, next) {
+    if (!req.body?.name || typeof req.body.name !== 'string') {
+        return next(new ApiError(400, 'Name should be a non-empty string'));
+    }
+
+    try {
+        const contact = await contactsService.createContact({
+            ...req.body,
+            avatar: req.file ? `/public/uploads/${req.file.filename}` : null,
+        });
+
+        return res
+            .status(201)
+            .set({
+                Location: `${req.baseUrl}/${contact.id}`,
+            })
+            .json(
+                JSend.success({
+                    contact,
+                })
+            );
+    } catch (error) {
+        console.log(error);
+        return next(new ApiError(500, 'An error occurred while creating the contact'));
+    }
+}
+
 module.exports = {
     getContactsByFilter,
     deleteAllContacts,
