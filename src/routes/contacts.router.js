@@ -25,6 +25,8 @@ module.exports.setup = (app) => {
  *         schema:
  *           type: string
  *         description: Filter by contact name
+ *       -  $ref: '#/components/parameters/limitParam'
+ *       -  $ref: '#/components/parameters/pageParam'  
  *     tags:
  *       - contacts
  *     responses:
@@ -46,10 +48,12 @@ module.exports.setup = (app) => {
  *                       type: array
  *                       items:
  *                         $ref: '#/components/schemas/Contact'
+ *                     metadata:
+ *                       $ref: '#/components/schemas/PaginationMetadata'
  */
     router.get('/', contactsController.getContactsByFilter);
     
-    /**
+/**
  * @swagger
  * /api/v1/contacts:
  *   post:
@@ -60,17 +64,7 @@ module.exports.setup = (app) => {
  *       content:
  *         multipart/form-data:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               email:
- *                 type: string
- *               phone:
- *                 type: string
- *               avatar:
- *                 type: string
- *                 format: binary
+ *             $ref: '#/components/schemas/Contact'
  *     tags:
  *       - contacts
  *     responses:
@@ -173,7 +167,7 @@ module.exports.setup = (app) => {
  *                     contact:
  *                       $ref: '#/components/schemas/Contact'
  */
-    router.put('/:id', contactsController.updateContact);
+    router.put('/:id', avatarUpload, contactsController.updateContact);
     
 /**
  * @swagger
